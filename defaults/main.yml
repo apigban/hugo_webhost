@@ -1,10 +1,10 @@
 ---
 # defaults file for hugo_webhost
-sites:
-  - name: alain.apigban.com
-    local_path: /var/www/html
-    repo_url: https://github.com/apigban/alain.apigban.com.git
-    port: 10000
+sites: []
+  # - name: alain.apigban.com
+  #   local_path: /var/www/html
+  #   repo_url: https://github.com/apigban/alain.apigban.com.git
+  #   port: 10000
   # - name: XXXXXX.apigban.com
   #   local_path: /var/www/html
   #   repo_url: https://github.com/apigban/alain.apigban.com.git
