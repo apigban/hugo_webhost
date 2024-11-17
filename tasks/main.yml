@@ -8,5 +8,11 @@
 - name: Install and configure caddy webserver
   ansible.builtin.include_tasks: setup-caddy.yml
 
-- name: Install and configure caddy webserver
+- name: Verify site configurations
+  ansible.builtin.include_tasks: verify-site-configs.yml
+
+- name: Deploy websites
   ansible.builtin.include_tasks: deploy-websites.yml
+
+- name: Configure firewall rules and verify traffic is allowed
+  ansible.builtin.include_tasks: allow-traffic.yml

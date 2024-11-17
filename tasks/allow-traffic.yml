@@ -1,0 +1,25 @@
+---
+- name: Enable traffic to sites ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}/tcp"
+    state: enabled
+    immediate: true
+    permanent: true
+  loop: "{{ sites }}"
+
+- name: Verify ports are open and sites are accessible
+  ansible.builtin.get_url:
+    url: "http://{{ ansible_host }}:{{ item.port }}/"
+    dest: "/tmp/site_check_{{ item.name }}"
+    timeout: 10
+  register: port_check
+  until: port_check is success
+  retries: 3
+  delay: 5
+  loop: "{{ sites }}"
+  ignore_errors: true
+
+- name: Display results of port checks
+  ansible.builtin.debug:
+    msg: "Site {{ item.item.name }} on port {{ item.item.port }} is {{ 'accessible' if item.failed == false else 'not accessible' }}"
+  loop: "{{ port_check.results }}"

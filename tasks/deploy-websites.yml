@@ -32,14 +32,6 @@
   loop_control:
     loop_var: site_item
 
-- name: Enable traffic to sites ports
-  ansible.posix.firewalld:
-    port: "{{ item.port }}/tcp"
-    state: enabled
-    immediate: true
-    permanent: true
-  loop: "{{ sites }}"
-
 - name: Create caddyfile
   notify: restart_caddy
   ansible.builtin.template:

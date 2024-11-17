@@ -1,0 +1,24 @@
+---
+- name: Check for duplicate ports
+  block:
+    - name: Create a list of ports
+      ansible.builtin.set_fact:
+        port_list: "{{ sites | map(attribute='port') | list }}"
+
+    - name: Create a list of domains
+      ansible.builtin.set_fact:
+        domain_list: "{{ sites | map(attribute='name') | list }}"
+
+    - name: Assert that there are no duplicate ports
+      ansible.builtin.assert:
+        that: 
+          - "port_list | unique | length == port_list | length"
+        fail_msg: "Duplicate ports detected in sites configuration. Each site must have a unique port."
+        success_msg: "All site ports are unique."
+    
+    - name: Assert that there are no duplicate domains
+      ansible.builtin.assert:
+        that: 
+          - "domain_list | unique | length == domain_list | length"
+        fail_msg: "Duplicate domains detected in sites configuration. Each site must have a unique domain."
+        success_msg: "All site domains are unique."
