@@ -14,6 +14,14 @@
     force: true
   loop: "{{ sites }}"
 
+- name: Change ownership of downloaded site repos
+  ansible.builtin.file:
+    path: "/var/www/html" # this should be as same as `dest` above
+    owner: "www-data"
+    group: "www-data"
+    state: directory
+    recurse: yes
+
 # Goal is to change for a list of commands to be executed on an arbitrary number of directories
 # outer_items: directory, site_item
 # inner_items: hugo.commands,
