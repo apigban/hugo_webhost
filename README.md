@@ -1,38 +1,89 @@
-Role Name
-=========
+# Hugo Webhost Role
 
-A brief description of the role goes here.
+This Ansible role deploys and manages Hugo-created websites on target hosts.
 
-Requirements
-------------
+## Role Description
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The `hugo_webhost` role automates the process of setting up and configuring a web server to host multiple Hugo-generated static websites. It handles package installation, user setup, Caddy web server configuration, and website deployment from Git repositories.
 
-Role Variables
---------------
+## Requirements
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- Ansible 2.17.5 or higher
+- Target hosts running EL 9 (AlmaLinux 9.4 tested)
+- Git installed on the control node
+- Internet access on target hosts for package installation and Git operations
 
-Dependencies
-------------
+## Dependencies
+This role depends on `caddy_ansible.caddy_ansible`: Used for installing and configuring the Caddy web server
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+## Role Variables
 
-Example Playbook
-----------------
+### Default Variables
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+The site varialble contains a list of hugo websites to deploy to the target host. You can override these defaults or add more sites as needed.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+These variables are defined in `defaults/main.yml`:
 
-License
--------
+```yaml
+sites:
+  - name: alain.apigban.com
+    local_path: /var/www/html
+    repo_url: https://github.com/apigban/alain.apigban.com.git
+    port: 10000
+  - name: another-site.apigban.com
+    local_path: /var/www/html
+    repo_url: https://github.com/apigban/another-site.apigban.com.git
+    port: 11000
+```
 
-BSD
+### Other Variables
+Additional variables are defined in `vars/main.yml`:
 
-Author Information
-------------------
+* `packages`: List of packages to be installed
+* `hugo`: Configuration for Hugo commands and version
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## Example Playbook
+```yaml
+- hosts: webservers
+  roles:
+    - role: hugo_webhost
+```
+
+## Role Structure
+```
+apigban.hugo_webhost
+├── ansible.cfg
+├── ansible-navigator.yml
+├── defaults
+│   └── main.yml
+├── files
+│   └── ...
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── molecule
+│   └── default    
+|    └── ...
+├── README.md
+├── requirements.yml
+├── tasks
+│   ├── deploy-websites.yml
+│   ├── hugo-operations.yml
+│   ├── main.yml
+│   ├── setup-caddy.yml
+│   ├── setup-pkgs.yml
+│   └── setup-users.yml
+├── templates
+│   └── ...
+├── tests
+│   └── ...
+└── vars
+    └── main.yml
+```
+
+## License
+MIT
+
+## Author Information
+Created by Alain Pinero Igban for apigban.com
