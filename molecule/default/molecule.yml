@@ -1,14 +1,41 @@
 ---
 dependency:
   name: galaxy
-  options:
-    requirements-file: requirements.yml
-platforms:
-  - name: molecule-podman-rocky-9.4
-    image: docker.io/rockylinux/rockylinux:9.4
+
 driver:
+  name: molecule-proxmox
   options:
-    managed: false
-    login_cmd_template: "podman exec -ti {instance} bash"
-    ansible_connection_options:
-      ansible_connection: podman
+    api_host: ${proxmox_api_host}
+    api_port: ${proxmox_api_port}
+    api_user: ${proxmox_api_user}
+    api_token_id: ${proxmox_api_token_id}
+    api_token_secret: ${proxmox_api_token_secret}
+    node: "proxmox"
+    ssh_user: ${proxmox_ssh_user}
+    ssh_port: ${proxmox_ssh_port}
+    ssh_identity_file: ${proxmox_ssh_identity_file}
+    timeout: 300
+    template_name: ${proxmox_template_name}
+
+platforms:
+  - name: molecule-rhel9.3
+    newid: 9999
+    ciuser: ${proxmox_ciuser}
+    cipassword: ${proxmox_cipassword}
+    ipconfig:
+      ipconfig0: 'ip=192.168.2.99/24,gw=192.168.2.1'
+    nameservers:
+      - 192.168.2.10
+
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    ssh-connection:
+      host_key_checking: false
+  connection_options:
+    ansible_ssh_user: ${proxmox_ssh_user}
+    ansible_ssh_common_args: -o IdentitiesOnly=no
+    ansible_become_pass: 
+  lint: 
+    name: "ansible-lint"
