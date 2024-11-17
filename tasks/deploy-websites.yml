@@ -32,6 +32,15 @@
   loop_control:
     loop_var: site_item
 
+- name: Change ownership of /var/log/caddy/
+  ansible.builtin.file:
+    path: "/var/log/caddy"
+    mode: "0755"
+    owner: "root"
+    group: "root"
+    state: directory
+    recurse: yes
+
 - name: Create caddyfile
   notify: restart_caddy
   ansible.builtin.template:
@@ -40,3 +49,4 @@
     mode: "0755"
     owner: root
     group: root
+    
