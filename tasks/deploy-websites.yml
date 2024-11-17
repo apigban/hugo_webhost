@@ -16,8 +16,9 @@
 
 - name: Change ownership of downloaded site repos
   ansible.builtin.file:
-    path: "/var/www/html" # this should be as same as `dest` above
+    path: "/var/www/html"
     mode: "0755"
+    owner: "{{ ansible_user }}"
     group: "www-data"
     state: directory
     recurse: yes

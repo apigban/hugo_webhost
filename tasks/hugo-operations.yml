@@ -1,5 +1,6 @@
 ---
 - name: Execute commands per site item
+  become_user: "{{ ansible_user }}"
   ansible.builtin.command:
     cmd: "{{ item }}" # inner item
     chdir: "{{ site_item.local_path }}/{{ site_item.name }}" # outer item
