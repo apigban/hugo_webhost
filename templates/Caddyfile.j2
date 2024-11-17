@@ -1,14 +1,13 @@
----
 {% for domain in sites %}
-    {{ domain.name }}: {{ domain.port }} {
-        root * {{ web_path }}
+{{ ansible_host }}:{{ domain.port }} {
+    root * {{ web_path }}/{{ domain.name }}
 
-        # Enable the static file server.
-        file_server
-        
-        # Enable logging
-        log {
-            output file /var/log/caddy/access-{{ domain.name }}.log
-        }
+    # Enable the static file server.
+    file_server
+    
+    # Enable logging
+    log {
+        output file /var/log/caddy/access-{{ domain.name }}.log
     }
+}
 {% endfor %}
