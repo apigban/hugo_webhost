@@ -32,9 +32,28 @@
   loop_control:
     loop_var: site_item
 
+- name: Execute caddy commands
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  loop: 
+    - /usr/local/bin/caddy trust
+    - sudo /usr/local/bin/caddy fmt --overwrite /etc/caddy/Caddyfile
+
 - name: Change ownership of /var/log/caddy/
+  become: true 
   ansible.builtin.file:
     path: "/var/log/caddy"
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: directory
+    recurse: yes
+
+- name: Change ownership of /etc/caddy
+  become: true
+  ansible.builtin.file:
+    path: "/etc/caddy"
     mode: "0755"
     owner: "root"
     group: "root"

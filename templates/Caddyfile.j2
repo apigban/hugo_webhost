@@ -1,6 +1,6 @@
 {% for domain in sites %}
-{{ ansible_host }}:{{ domain.port }} {
-    root * {{ web_path }}/{{ domain.name }}
+http://{{ ansible_host }}:{{ domain.port }} {
+    root * {{ web_path }}/{{ domain.name }}/public
 
     # Enable the static file server.
     file_server
