@@ -1,0 +1,10 @@
+---
+# handlers file for hugo_webhost
+
+- name: Restart Caddy
+  listen: restart_caddy
+  ansible.builtin.service:
+    name: caddy
+    state: started
+    enabled: true
+    daemon_reload: true

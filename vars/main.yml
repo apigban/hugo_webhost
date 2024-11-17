@@ -1,0 +1,22 @@
+---
+# vars file for hugo_webhost
+packages:
+  - firewalld
+  - iotop
+  - tmux
+  - qemu-guest-agent
+  - vim
+  - git
+  - container-tools
+  - epel-release
+  - procps
+
+hugo:
+  # List of hugo commands to be executed for each site
+  commands:
+    - hugo mod get -u
+    - hugo mod tidy
+    - hugo mod npm pack
+    - npm install
+    - hugo
+  version: 0.138.0

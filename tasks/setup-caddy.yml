@@ -1,0 +1,11 @@
+---
+- name: Install Caddy
+  ansible.builtin.include_role:
+    name: caddy_ansible.caddy_ansible
+
+- name: Copy caddy.service
+  notify: restart_caddy
+  ansible.builtin.copy:
+    src: files/caddy.service
+    dest: /etc/systemd/system/caddy.service
+    owner: root

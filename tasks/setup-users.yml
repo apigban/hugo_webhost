@@ -1,0 +1,23 @@
+---
+- name: Add the user 'www-data' group
+  ansible.builtin.group:
+    name: "{{ item }}"
+  loop: 
+    - www-data
+    - caddy
+
+- name: Add the user 'www-data' user
+  ansible.builtin.user:
+    name: www-data
+    group: www-data
+    shell: /usr/sbin/nologin
+
+- name: Add the user 'caddy' user
+  ansible.builtin.user:
+    name: caddy
+    group: caddy
+    groups: www-data
+    shell: /usr/sbin/nologin
+    create_home: true
+    home: /var/lib/caddy
+    system: true

@@ -1,0 +1,26 @@
+---
+- name: Update all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install packages
+  ansible.builtin.dnf:
+    name: "{{ packages }}"
+    state: present
+    disable_gpg_check: true
+
+- name: Check if reboot_required
+  ansible.builtin.shell:
+    cmd: "dnf needs-restarting -r"
+  changed_when: false
+  failed_when: reboot_required.rc != 0 and reboot_required.rc != 1
+  check_mode: false
+  register: reboot_required
+
+- name: Reboot if needed
+  ansible.builtin.reboot:
+    msg: "{{ reboot_required.stdout }}"
+    reboot_timeout: 300
+    pre_reboot_delay: 10
+    

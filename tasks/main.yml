@@ -1,0 +1,12 @@
+---
+- name: Prepare webhost package dependencies
+  ansible.builtin.include_tasks: setup-pkgs.yml
+
+- name: Add users and groups
+  ansible.builtin.include_tasks: setup-users.yml
+
+- name: Install and configure caddy webserver
+  ansible.builtin.include_tasks: setup-caddy.yml
+
+- name: Install and configure caddy webserver
+  ansible.builtin.include_tasks: deploy-websites.yml

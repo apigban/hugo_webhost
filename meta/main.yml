@@ -1,0 +1,18 @@
+galaxy_info:
+  role_name: hugo_webhost
+  author: Alain Pinero Igban
+  description: Deploys hugo-created websites to targets
+  company: apigban.com
+
+  license: MIT
+
+  min_ansible_version: 2.17.5
+
+  platforms:
+    - name: EL
+      versions:
+        - "9"
+
+  galaxy_tags: []
+
+dependencies: []

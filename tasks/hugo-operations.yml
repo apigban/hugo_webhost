@@ -1,0 +1,8 @@
+---
+- name: Execute commands per site item
+  ansible.builtin.command:
+    cmd: "{{ item }}" # inner item
+    chdir: "{{ site_item.local_path }}/{{ site_item.name }}" # outer item
+  loop: "{{ hugo.commands }}" # inner list
+  register: hugo_output
+  changed_when: hugo_output.rc != 0

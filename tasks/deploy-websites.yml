@@ -1,0 +1,41 @@
+---
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ web_path }}"
+    state: directory
+    mode: "0755"
+    owner: www-data
+    group: www-data
+
+- name: Clone site repositories
+  ansible.builtin.git:
+    repo: "{{ item.repo_url }}"
+    dest: "{{ item.local_path }}/{{ item.name }}"
+    force: true
+  loop: "{{ sites }}"
+
+# Goal is to change for a list of commands to be executed on an arbitrary number of directories
+# outer_items: directory, site_item
+# inner_items: hugo.commands,
+- name: Build Hugo site per site item
+  ansible.builtin.include_tasks: hugo-operations.yml
+  loop: "{{ sites }}"
+  loop_control:
+    loop_var: site_item
+
+- name: Enable traffic to sites ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}/tcp"
+    state: enabled
+    immediate: true
+    permanent: true
+  loop: "{{ sites }}"
+
+- name: Create caddyfile
+  notify: restart_caddy
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+    mode: "0755"
+    owner: root
+    group: root
