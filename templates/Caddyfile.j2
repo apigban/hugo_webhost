@@ -2,8 +2,13 @@
 {% for domain in sites %}
     {{ domain.name }}: {{ domain.port }} {
         root * {{ web_path }}
+
         # Enable the static file server.
         file_server
+        
+        # Enable logging
+        log {
+            output file /var/log/caddy/access-{{ domain.name }}.log
+        }
     }
-}
 {% endfor %}
