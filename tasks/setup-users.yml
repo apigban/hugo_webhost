@@ -6,6 +6,12 @@
     - www-data
     - caddy
 
+- name: Add existing user '{{ ansible_user }}' to www-data group
+  user:
+    name: '{{ ansible_user }}'
+    groups: www-data
+    append: yes
+
 - name: Add the user 'www-data' user
   ansible.builtin.user:
     name: www-data
