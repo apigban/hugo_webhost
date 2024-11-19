@@ -1,12 +1,15 @@
 ---
 - name: Prepare webhost package dependencies
   ansible.builtin.include_tasks: setup-pkgs.yml
+  when: only_update_content == false
 
 - name: Add users and groups
   ansible.builtin.include_tasks: setup-users.yml
+  when: only_update_content == false
 
 - name: Install and configure caddy webserver
   ansible.builtin.include_tasks: setup-caddy.yml
+  when: only_update_content == false
 
 - name: Verify site configurations
   ansible.builtin.include_tasks: verify-site-configs.yml
@@ -16,3 +19,4 @@
 
 - name: Configure firewall rules and verify traffic is allowed
   ansible.builtin.include_tasks: allow-traffic.yml
+  when: only_update_content == false
