@@ -9,3 +9,4 @@ sites: []
   #   local_path: /var/www/html
   #   repo_url: https://github.com/apigban/alain.apigban.com.git
   #   port: 10000
+only_update_content: false
